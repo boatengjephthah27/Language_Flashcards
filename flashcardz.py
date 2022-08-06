@@ -24,11 +24,13 @@ app.config(
 )
 
 canvas = Canvas(
-    width=400,
-    height=400
+    width=414,
+    height=414,
+    bg=bg_color,
+    highlightthickness=0
 )
 img1 = PhotoImage(file="blue.png")
-canvas.create_image(200,200, image=img1)
+canvas.create_image(207,207, image=img1)
 
 canvas.pack()
 
