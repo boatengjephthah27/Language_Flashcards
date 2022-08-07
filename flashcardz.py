@@ -1,6 +1,4 @@
-from textwrap import fill
 from tkinter import *
-from tkinter import messagebox
 from tkinter.font import BOLD, ITALIC
 import pandas as pd, random as ran, time as t
 
@@ -46,6 +44,12 @@ def French():
         reading_data = fr_data_unknown.to_dict(orient="records")
         
     next_word()
+    # fr.config(
+    #     command=popup.des
+    # )
+    
+    popup.destroy()
+    
 
 
 def Spanish():
@@ -63,6 +67,7 @@ def Spanish():
         reading_data = es_data_unknown.to_dict(orient="records")
         
     next_word()
+    popup.destroy()
 
 
     
@@ -96,9 +101,10 @@ def flip():
     canvas.itemconfig(card_img, image=img2)
      
 
-messagebox
+
 
 def lang_choice():
+    global popup
     popup = Toplevel(app)
     popup.title('Choose Language')
     popup.config(
@@ -114,6 +120,7 @@ def lang_choice():
     )
     prompt.grid(row=0, column=0, columnspan=2)
     
+    # global fr
     fr = Button(
         popup,
         text='French',
@@ -124,6 +131,7 @@ def lang_choice():
     )
     fr.grid(row=1, column=0)
     
+    # global es
     es = Button(
         popup,
         text='Spanish',
@@ -154,7 +162,8 @@ app.config(
     bg=bg_color
 )
 
-flipper = app.after(3000, func=flip)
+flipper = app.after(2000, func=flip)
+app.after_cancel(flipper)
 
 # canvas
 canvas = Canvas(
@@ -169,14 +178,14 @@ card_img = canvas.create_image(300,207, image=img1)
 
 title_ = canvas.create_text(
     300,90,
-    text="",
+    text="Language",
     font=("COURIER", 30, ITALIC, BOLD),
 )
 
 word_ = canvas.create_text(
     300,250,
-    text="",
-    font=("COURIER", 55, BOLD),
+    text="Word",
+    font=("COURIER", 45, BOLD),
     
 )
 
