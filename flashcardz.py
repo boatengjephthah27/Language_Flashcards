@@ -43,10 +43,11 @@ def French():
     else:
         reading_data = fr_data_unknown.to_dict(orient="records")
         
+    l_change.config(
+        image=fr_flag
+    )
+        
     next_word()
-    # fr.config(
-    #     command=popup.des
-    # )
     
     popup.destroy()
     
@@ -66,7 +67,12 @@ def Spanish():
     else:
         reading_data = es_data_unknown.to_dict(orient="records")
         
+    l_change.config(
+        image=es_flag
+    )
+        
     next_word()
+    
     popup.destroy()
 
 
@@ -189,7 +195,7 @@ word_ = canvas.create_text(
     
 )
 
-canvas.grid(row=1, column=0, columnspan=2)
+canvas.grid(row=2, column=0, columnspan=2)
 
 # label
 label = Label(
@@ -198,7 +204,7 @@ label = Label(
     bg=bg_color,
     pady=50
 )
-label.grid(row=0, column=0, columnspan=2)
+label.grid(row=1, column=0, columnspan=2)
 
 # buttons
 no_img = PhotoImage(file="images/w.png")
@@ -208,7 +214,7 @@ no = Button (
     border=0,
     command=next_word
 )
-no.grid(row=2, column=0)
+no.grid(row=3, column=0)
 
 yes_img = PhotoImage(file="images/r.png")
 yes = Button (
@@ -217,17 +223,25 @@ yes = Button (
     border=0,
     command=next_unknown_word
 )
-yes.grid(row=2, column=1)
+yes.grid(row=3, column=1)
+
+# flags
+l_change_img = PhotoImage(file="images/lang.png")
+fr_flag = PhotoImage(file="images/frflag.png")
+es_flag = PhotoImage(file="images/esflag.png")
+
+# flag button
 
 l_change = Button (
-    text="language",
+    image=l_change_img,
     highlightthickness=0,
     border=0,
     command=lang_choice
 )
-l_change.grid(row=3, column=0, columnspan=2)
+l_change.grid(row=0, column=0, columnspan=2)
 
 lang_choice()
+
 
 
 
