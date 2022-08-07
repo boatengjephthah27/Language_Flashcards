@@ -1,5 +1,6 @@
 from textwrap import fill
 from tkinter import *
+from tkinter import messagebox
 from tkinter.font import BOLD, ITALIC
 import pandas as pd, random as ran, time as t
 
@@ -16,11 +17,11 @@ import pandas as pd, random as ran, time as t
 e_color = "#FF5B00"
 o_color = "#001E6C"
 bg_color = "#3399CC"
-fr_data = pd.read_csv("data/fr.csv")
-es_data = pd.read_csv("data/es.csv")
-fr_dict = fr_data.to_dict(orient="records")
-es_dict = es_data.to_dict(orient="records")
 card = {}
+reading_data = {}
+title_text = ""
+value_text = ""
+
 
 
 
@@ -30,16 +31,49 @@ card = {}
 # ****************************************************** FUNCTIONS ***********************************************************
 
 
+def French():
+    global reading_data, title_text, key_text
+    title_text = "French"
+    key_text = "french"
+    try:
+        fr_data_unknown = pd.read_csv("data/fr_unknown_words.csv")
+
+    except FileNotFoundError:
+        fr_data = pd.read_csv("data/fr.csv")
+        reading_data = fr_data.to_dict(orient="records")
+
+    else:
+        reading_data = fr_data_unknown.to_dict(orient="records")
+        
+    next_word()
 
 
+def Spanish():
+    global reading_data, title_text, key_text
+    title_text = "Spanish"
+    key_text = "spanish"
+    try:
+        es_data_unknown = pd.read_csv("data/es_unknown_words.csv")
+
+    except FileNotFoundError:
+        es_data = pd.read_csv("data/es.csv")
+        reading_data = es_data.to_dict(orient="records")
+
+    else:
+        reading_data = es_data_unknown.to_dict(orient="records")
+        
+    next_word()
+
+
+    
 
 
 def next_word():
     global card, flipper
-    app.after_cancel(flip)
-    card = ran.choice(fr_dict)
-    canvas.itemconfig(title_, text="French", fill=o_color)
-    canvas.itemconfig(word_, text=card["french"], fill=o_color)
+    app.after_cancel(flipper)
+    card = ran.choice(reading_data)
+    canvas.itemconfig(title_, text=title_text, fill=o_color)
+    canvas.itemconfig(word_, text=card[key_text], fill=o_color)
     canvas.itemconfig(card_img, image=img1)
     flipper = app.after(5000, func=flip)
 
@@ -48,10 +82,10 @@ def next_word():
 
 
 def next_unknown_word():
-    fr_dict.remove(card)
+    reading_data.remove(card)
     next_word()
-    new_data = pd.DataFrame(fr_dict)
-    new_data.to_csv("data/unknown_words.csv")
+    new_data = pd.DataFrame(reading_data)
+    new_data.to_csv("data/fr_unknown_words.csv", index=False)
     
 
 
@@ -61,10 +95,47 @@ def flip():
     canvas.itemconfig(word_, text=card["english"], fill="yellow")
     canvas.itemconfig(card_img, image=img2)
      
+
+messagebox
+
+def lang_choice():
+    popup = Toplevel(app)
+    popup.title('Choose Language')
+    popup.config(
+        padx=20,
+        pady=20
+    )
+    
+    message = "\nWhich Language \ndo you want to learn today?\n\nFrench or Spanish?\n\n\n"
+    prompt = Label(
+        popup,
+        text=message,
+        font=("COURIER", 16, BOLD)
+    )
+    prompt.grid(row=0, column=0, columnspan=2)
+    
+    fr = Button(
+        popup,
+        text='French',
+        font=("COURIER", 20, "bold"),
+        padx=15,
+        pady=10,
+        command=French
+    )
+    fr.grid(row=1, column=0)
+    
+    es = Button(
+        popup,
+        text='Spanish',
+        font=("COURIER", 20, "bold"),
+        padx=15,
+        pady=10,
+        command=Spanish
+    )
+    es.grid(row=1, column=1)
     
     
-    
-    
+
     
     
 # ****************************************************** GUI ******************************************************************
@@ -83,7 +154,7 @@ app.config(
     bg=bg_color
 )
 
-flipper = app.after(5000, func=flip)
+flipper = app.after(3000, func=flip)
 
 # canvas
 canvas = Canvas(
@@ -141,9 +212,9 @@ yes.grid(row=2, column=1)
 
 
 
+lang_choice()
 
 
-next_word()
 
 
 app.mainloop()
