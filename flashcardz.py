@@ -19,6 +19,8 @@ card = {}
 reading_data = {}
 title_text = ""
 value_text = ""
+yes_count = 0
+no_count = 0
 
 
 
@@ -27,6 +29,11 @@ value_text = ""
 
 
 # ****************************************************** FUNCTIONS ***********************************************************
+
+
+
+
+
 
 
 def French():
@@ -92,13 +99,31 @@ def next_word():
     
 
 
-def next_unknown_word():
+def next_yes_word():
+    global yes_count
+    yes_count += 1
+    if yes_count < 10:
+        label.itemconfig(unknown, text=f"Unknown: 0{yes_count}")
+    else:
+        label.itemconfig(unknown, text=f"Unknown: {yes_count}")
+        
     reading_data.remove(card)
     next_word()
     new_data = pd.DataFrame(reading_data)
     new_data.to_csv("data/fr_unknown_words.csv", index=False)
     
 
+def next_no_word():
+    global no_count
+    no_count += 1
+    if no_count < 10:
+        label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+    else:
+        label.itemconfig(unknown, text=f"Unknown: {no_count}")
+        
+    next_word()
+    
+    
 
 
 def flip():
@@ -117,6 +142,7 @@ def lang_choice():
         padx=20,
         pady=20
     )
+    popup.resizable(False,False)
     
     message = "\nWhich Language \ndo you want to learn today?\n\nFrench or Spanish?\n\n\n"
     prompt = Label(
@@ -152,6 +178,7 @@ def lang_choice():
 
     
     
+    
 # ****************************************************** GUI ******************************************************************
 
 
@@ -167,6 +194,7 @@ app.config(
     pady=20,
     bg=bg_color
 )
+app.resizable(False,False)
 
 flipper = app.after(2000, func=flip)
 app.after_cancel(flipper)
@@ -198,13 +226,25 @@ word_ = canvas.create_text(
 canvas.grid(row=2, column=0, columnspan=2)
 
 # label
-label = Label(
-    text="Vocabulary Flashcards",
-    font=("COURIER", 30, BOLD),
+label = Canvas(
+    width=600,
+    height=150,
     bg=bg_color,
-    pady=50
+    highlightthickness=0,    
 )
 label.grid(row=1, column=0, columnspan=2)
+
+unknown = label.create_text(
+    120,75,
+    text="Unknown: 00",
+    font=("COURIER", 32, BOLD),
+)
+
+known = label.create_text(
+    480,75,
+    text="Known: 00",
+    font=("COURIER", 32, BOLD),
+)
 
 # buttons
 no_img = PhotoImage(file="images/w.png")
@@ -212,7 +252,7 @@ no = Button (
     image=no_img,
     highlightthickness=0,
     border=0,
-    command=next_word
+    command=next_no_word
 )
 no.grid(row=3, column=0)
 
@@ -221,7 +261,7 @@ yes = Button (
     image=yes_img,
     highlightthickness=0,
     border=0,
-    command=next_unknown_word
+    command=next_yes_word
 )
 yes.grid(row=3, column=1)
 
