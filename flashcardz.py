@@ -219,7 +219,13 @@ yes = Button (
 )
 yes.grid(row=2, column=1)
 
-
+l_change = Button (
+    text="language",
+    highlightthickness=0,
+    border=0,
+    command=lang_choice
+)
+l_change.grid(row=3, column=0, columnspan=2)
 
 lang_choice()
 
