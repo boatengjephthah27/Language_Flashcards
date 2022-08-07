@@ -137,9 +137,12 @@ def call_count(key_name):
             json.dump(file_dict, file, indent=3)
 
     else:
-        if "no_count_fr" in data_file:
+        if key_name in data_file:
+            global no_count
             no_count = data_file[key_name]
             print(no_count)
+            
+        
 
 
 def next_word():
@@ -156,9 +159,10 @@ def next_word():
 
 
 def next_yes_word_fr():
-    global yes_count, key_name
-    key_name = "yes_fr"
-    yes_count += 1
+    
+    keep_count("yes_fr")
+    call_count("yes_fr")
+    
     if yes_count < 10:
         label.itemconfig(known, text=f"known: 0{yes_count}")
     else:
@@ -172,9 +176,10 @@ def next_yes_word_fr():
     
     
 def next_yes_word_es():
-    global yes_count, key_name
-    key_name = "yes_es"
-    yes_count += 1
+    
+    keep_count("yes_es")
+    call_count("yes_es")
+    
     if yes_count < 10:
         label.itemconfig(known, text=f"known: 0{yes_count}")
     else:
@@ -185,42 +190,30 @@ def next_yes_word_es():
     new_data = pd.DataFrame(reading_data)
     new_data.to_csv("data/es_unknown_words.csv", index=False)
     
-    
-
-# def next_no_word():
-#     global no_count
-#     no_count += 1
-#     if no_count < 10:
-#         label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
-#     else:
-#         label.itemconfig(unknown, text=f"Unknown: {no_count}")
-        
-#     next_word()
-    
 
 
 def next_no_word_fr():
                     
     keep_count("no_fr")
-    call_count("no_fr")
+    # call_count("no_fr")
     
-    if no_count < 10:
-        label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
-    else:
-        label.itemconfig(unknown, text=f"Unknown: {no_count}")
+    global no_count
+    if True:
+        call_count("no_fr")
+        if no_count < 10:
+            label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+        else:
+            label.itemconfig(unknown, text=f"Unknown: {no_count}")
     
     next_word()
-    
-    
-    
+      
     
     
 def next_no_word_es():
-    global key_name
-    key_name = "no_es"
     
-    global no_count
-    no_count += 1
+    keep_count("no_es")
+    call_count("no_es")
+    
     if no_count < 10:
         label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
     else:
