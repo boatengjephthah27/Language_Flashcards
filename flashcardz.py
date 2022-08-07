@@ -37,7 +37,6 @@ def next_word():
     card = ran.choice(fr_dict)
     canvas.itemconfig(title_, text="French")
     canvas.itemconfig(word_, text=card["french"])
-    t.sleep(7)
     print(card)
     
 
@@ -45,6 +44,8 @@ def next_word():
 def flip():
     canvas.itemconfig(title_, text="English")
     canvas.itemconfig(word_, text=card["english"])
+    canvas.itemconfig(card_img, image=img2)
+     
     
     
     
@@ -52,7 +53,6 @@ def flip():
     
     
 # ****************************************************** GUI ******************************************************************
-
 
 
 
@@ -78,7 +78,8 @@ canvas = Canvas(
     highlightthickness=0,
 )
 img1 = PhotoImage(file="ash.png")
-canvas.create_image(300,207, image=img1)
+img2 = PhotoImage(file="blue.png")
+card_img = canvas.create_image(300,207, image=img1)
 
 title_ = canvas.create_text(
     300,90,
