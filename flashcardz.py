@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.font import BOLD, ITALIC
+import pandas as pd
 
 
 
@@ -9,8 +10,11 @@ from tkinter.font import BOLD, ITALIC
 bg_color = "#3399CC"
 
 
+# ****************************************************** FUNCTIONS ***********************************************************
 
-
+def next_word(file):
+    data = pd.read_csv(file)
+    
 
 
 
@@ -65,7 +69,7 @@ no = Button (
     image=no_img,
     highlightthickness=0,
     border=0,
-    padx=20
+    command=next_word
 )
 no.grid(row=2, column=0)
 
@@ -74,7 +78,7 @@ yes = Button (
     image=yes_img,
     highlightthickness=0,
     border=0,
-    padx=20
+    command=next_word
 )
 yes.grid(row=2, column=1)
 
