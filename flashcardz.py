@@ -1,25 +1,63 @@
 from tkinter import *
 from tkinter.font import BOLD, ITALIC
-import pandas as pd
+import pandas as pd, random as ran, time as t
 
 
 
 
 # ****************************************************** CONSTANTS ***********************************************************
 
+
+
+
+
+
+
 bg_color = "#3399CC"
+fr_data = pd.read_csv("fr.csv")
+es_data = pd.read_csv("es.csv")
+fr_dict = fr_data.to_dict(orient="records")
+es_dict = es_data.to_dict(orient="records")
+card = {}
+
+
+
+
 
 
 # ****************************************************** FUNCTIONS ***********************************************************
 
-def next_word(file):
-    data = pd.read_csv(file)
+
+
+
+
+
+def next_word():
+    global card
+    card = ran.choice(fr_dict)
+    canvas.itemconfig(title_, text="French")
+    canvas.itemconfig(word_, text=card["french"])
+    t.sleep(7)
+    print(card)
     
 
 
-
-
+def flip():
+    canvas.itemconfig(title_, text="English")
+    canvas.itemconfig(word_, text=card["english"])
+    
+    
+    
+    
+    
+    
 # ****************************************************** GUI ******************************************************************
+
+
+
+
+
+
 
 # app window
 app = Tk()
@@ -29,6 +67,8 @@ app.config(
     pady=20,
     bg=bg_color
 )
+
+app.after(7000, func=flip)
 
 # canvas
 canvas = Canvas(
@@ -40,15 +80,15 @@ canvas = Canvas(
 img1 = PhotoImage(file="ash.png")
 canvas.create_image(300,207, image=img1)
 
-canvas.create_text(
+title_ = canvas.create_text(
     300,90,
-    text="Title",
+    text="",
     font=("COURIER", 30, ITALIC, BOLD),
 )
 
-canvas.create_text(
+word_ = canvas.create_text(
     300,250,
-    text="Word",
+    text="",
     font=("COURIER", 55, BOLD)
 )
 
@@ -86,6 +126,7 @@ yes.grid(row=2, column=1)
 
 
 
+next_word()
 
 
 app.mainloop()
