@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.font import BOLD, ITALIC
-import pandas as pd, random as ran
+import pandas as pd, random as ran, json
 
 
 
@@ -19,9 +19,8 @@ card = {}
 reading_data = {}
 title_text = ""
 value_text = ""
-yes_count = 0
-no_count = 0
-
+# yes_count = 0
+# no_count = 0
 
 
 
@@ -39,6 +38,7 @@ no_count = 0
 def French():
     
     yes.config(command=next_yes_word_fr)
+    no.config(command=next_no_word_fr)
     
     global yes_count, no_count
     yes_count = 0
@@ -72,6 +72,8 @@ def French():
 def Spanish():
     
     yes.config(command=next_yes_word_es)
+    no.config(command=next_no_word_es)
+
     
     global yes_count, no_count
     yes_count = 0
@@ -101,7 +103,43 @@ def Spanish():
     popup.destroy()
 
 
+def keep_count(key_name):
     
+    global no_count
+     
+    # opening and reading count file        
+    try:
+        with open("data/count_file.json","r") as file:
+            data_file = json.load(file)
+            file_dict = {key_name : data_file[key_name]} 
+            data_file.update(file_dict)
+
+    except FileNotFoundError:
+        with open("data/count_file.json","w") as file:
+            file_dict = {key_name : 1}
+            json.dump(file_dict, file, indent=3)
+
+    else:
+        with open("data/count_file.json","w") as file:
+            data_file[key_name] += 1
+            json.dump(data_file, file, indent=3)
+            
+            
+
+def call_count(key_name):
+    try:
+        with open("data/count_file.json","r") as file:
+            data_file = json.load(file)
+
+    except FileNotFoundError:
+        with open("data/count_file.json","w") as file:
+            file_dict = {key_name : no_count} 
+            json.dump(file_dict, file, indent=3)
+
+    else:
+        if "no_count_fr" in data_file:
+            no_count = data_file[key_name]
+            print(no_count)
 
 
 def next_word():
@@ -118,7 +156,8 @@ def next_word():
 
 
 def next_yes_word_fr():
-    global yes_count
+    global yes_count, key_name
+    key_name = "yes_fr"
     yes_count += 1
     if yes_count < 10:
         label.itemconfig(known, text=f"known: 0{yes_count}")
@@ -133,7 +172,8 @@ def next_yes_word_fr():
     
     
 def next_yes_word_es():
-    global yes_count
+    global yes_count, key_name
+    key_name = "yes_es"
     yes_count += 1
     if yes_count < 10:
         label.itemconfig(known, text=f"known: 0{yes_count}")
@@ -147,7 +187,38 @@ def next_yes_word_es():
     
     
 
-def next_no_word():
+# def next_no_word():
+#     global no_count
+#     no_count += 1
+#     if no_count < 10:
+#         label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+#     else:
+#         label.itemconfig(unknown, text=f"Unknown: {no_count}")
+        
+#     next_word()
+    
+
+
+def next_no_word_fr():
+                    
+    keep_count("no_fr")
+    call_count("no_fr")
+    
+    if no_count < 10:
+        label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+    else:
+        label.itemconfig(unknown, text=f"Unknown: {no_count}")
+    
+    next_word()
+    
+    
+    
+    
+    
+def next_no_word_es():
+    global key_name
+    key_name = "no_es"
+    
     global no_count
     no_count += 1
     if no_count < 10:
@@ -158,7 +229,6 @@ def next_no_word():
     next_word()
     
     
-
 
 def flip():
     canvas.itemconfig(title_, text="English", fill="yellow")
@@ -176,6 +246,16 @@ def lang_choice():
         padx=20,
         pady=20
     )
+    
+    
+    # app geometry
+    screen_width = popup.winfo_screenwidth()
+    screen_height = popup.winfo_screenheight()
+    window_height = 240
+    window_width = 333
+    width_center = int(screen_width/2 - window_width/2)
+    height_center = int(screen_height/2 - window_height/2)
+    window_position = popup.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
     popup.resizable(False,False)
     
     message = "\nWhich Language \ndo you want to learn today?\n\nFrench or Spanish?\n\n\n"
@@ -228,6 +308,15 @@ app.config(
     pady=20,
     bg=bg_color
 )
+
+# app geometry
+screen_width = app.winfo_screenwidth()
+screen_height = app.winfo_screenheight()
+window_height = 720
+window_width = 693
+width_center = int(screen_width/2 - window_width/2)
+height_center = int(screen_height/2 - window_height/2)
+window_position = app.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
 app.resizable(False,False)
 
 flipper = app.after(2000, func=flip)
@@ -286,7 +375,7 @@ no = Button (
     image=no_img,
     highlightthickness=0,
     border=0,
-    command=next_no_word
+    command=None
 )
 no.grid(row=3, column=0)
 
