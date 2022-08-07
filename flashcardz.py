@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.font import BOLD, ITALIC
-import pandas as pd, random as ran, time as t
+import pandas as pd, random as ran
 
 
 
@@ -37,6 +37,15 @@ no_count = 0
 
 
 def French():
+    
+    yes.config(command=next_yes_word_fr)
+    
+    global yes_count, no_count
+    yes_count = 0
+    no_count = 0
+    label.itemconfig(known, text=f"known: 0{yes_count}")
+    label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+    
     global reading_data, title_text, key_text
     title_text = "French"
     key_text = "french"
@@ -61,6 +70,15 @@ def French():
 
 
 def Spanish():
+    
+    yes.config(command=next_yes_word_es)
+    
+    global yes_count, no_count
+    yes_count = 0
+    no_count = 0
+    label.itemconfig(known, text=f"known: 0{yes_count}")
+    label.itemconfig(unknown, text=f"Unknown: 0{no_count}")
+    
     global reading_data, title_text, key_text
     title_text = "Spanish"
     key_text = "spanish"
@@ -95,22 +113,38 @@ def next_word():
     canvas.itemconfig(card_img, image=img1)
     flipper = app.after(5000, func=flip)
 
-    print(card)
-    
+    print(card) 
+        
 
 
-def next_yes_word():
+def next_yes_word_fr():
     global yes_count
     yes_count += 1
     if yes_count < 10:
-        label.itemconfig(unknown, text=f"Unknown: 0{yes_count}")
+        label.itemconfig(known, text=f"known: 0{yes_count}")
     else:
-        label.itemconfig(unknown, text=f"Unknown: {yes_count}")
+        label.itemconfig(known, text=f"known: {yes_count}")
         
     reading_data.remove(card)
     next_word()
     new_data = pd.DataFrame(reading_data)
     new_data.to_csv("data/fr_unknown_words.csv", index=False)
+    
+    
+    
+def next_yes_word_es():
+    global yes_count
+    yes_count += 1
+    if yes_count < 10:
+        label.itemconfig(known, text=f"known: 0{yes_count}")
+    else:
+        label.itemconfig(known, text=f"known: {yes_count}")
+        
+    reading_data.remove(card)
+    next_word()
+    new_data = pd.DataFrame(reading_data)
+    new_data.to_csv("data/es_unknown_words.csv", index=False)
+    
     
 
 def next_no_word():
@@ -261,7 +295,7 @@ yes = Button (
     image=yes_img,
     highlightthickness=0,
     border=0,
-    command=next_yes_word
+    command=None
 )
 yes.grid(row=3, column=1)
 
