@@ -7,7 +7,7 @@ import pandas as pd, random as ran, json
 
 # ****************************************************** CONSTANTS ***********************************************************
 
-
+# TODO sound to click
 
 
 
@@ -104,43 +104,55 @@ def Spanish():
 
 
 def keep_count(key_name):
-    
-    global no_count
      
     # opening and reading count file        
     try:
         with open("data/count_file.json","r") as file:
             data_file = json.load(file)
-            file_dict = {key_name : data_file[key_name]} 
-            data_file.update(file_dict)
+            try:
+                file_dict = {key_name : data_file[key_name]} 
+                data_file.update(file_dict)
+            except KeyError:
+                with open("data/count_file.json","r") as file:
+                    file_dict = {key_name : 0} 
+                    data_file.update(file_dict)
 
     except FileNotFoundError:
         with open("data/count_file.json","w") as file:
             file_dict = {key_name : 1}
-            json.dump(file_dict, file, indent=3)
+            json.dump(file_dict, file, indent=1)
 
     else:
-        with open("data/count_file.json","w") as file:
-            data_file[key_name] += 1
-            json.dump(data_file, file, indent=3)
+        if key_name in data_file:
+            with open("data/count_file.json","w") as file:
+                data_file[key_name] += 1
+                json.dump(data_file, file, indent=1)
+        # else:
+        #     with open("data/count_file.json","w") as file:
+        #         file_dict = {key_name : 1} 
+        #         json.dump(file_dict, file)
             
             
 
 def call_count(key_name):
-    try:
-        with open("data/count_file.json","r") as file:
-            data_file = json.load(file)
+    # try:
+    with open("data/count_file.json","r") as file:
+        data_file = json.load(file)
 
-    except FileNotFoundError:
-        with open("data/count_file.json","w") as file:
-            file_dict = {key_name : no_count} 
-            json.dump(file_dict, file, indent=3)
+    # except FileNotFoundError:
+    #     with open("data/count_file.json","w") as file:
+    #         file_dict = {key_name : 1} 
+    #         json.dump(file_dict, file)
 
-    else:
-        if key_name in data_file:
-            global no_count
-            no_count = data_file[key_name]
-            print(no_count)
+    # else:
+    if key_name in data_file:
+        global no_count
+        no_count = data_file[key_name]
+        print(no_count)
+        # else:
+        #     with open("data/count_file.json","w") as file:
+        #         file_dict = {key_name : 1} 
+        #         json.dump(file_dict, file, indent=3)
             
         
 
@@ -163,11 +175,11 @@ def next_yes_word_fr():
     keep_count("yes_fr")
     call_count("yes_fr")
     
-    if yes_count < 10:
-        label.itemconfig(known, text=f"known: 0{yes_count}")
+    if no_count < 10:
+        label.itemconfig(known, text=f"Known: 0{no_count}")
     else:
-        label.itemconfig(known, text=f"known: {yes_count}")
-        
+        label.itemconfig(known, text=f"Known: {no_count}")
+                
     reading_data.remove(card)
     next_word()
     new_data = pd.DataFrame(reading_data)
@@ -180,11 +192,11 @@ def next_yes_word_es():
     keep_count("yes_es")
     call_count("yes_es")
     
-    if yes_count < 10:
-        label.itemconfig(known, text=f"known: 0{yes_count}")
+    if no_count < 10:
+        label.itemconfig(known, text=f"Known: 0{no_count}")
     else:
-        label.itemconfig(known, text=f"known: {yes_count}")
-        
+        label.itemconfig(known, text=f"Known: {no_count}")
+                
     reading_data.remove(card)
     next_word()
     new_data = pd.DataFrame(reading_data)
