@@ -19,8 +19,7 @@ card = {}
 reading_data = {}
 title_text = ""
 value_text = ""
-# yes_count = 0
-# no_count = 0
+
 
 
 
@@ -135,16 +134,9 @@ def keep_count(key_name):
             
 
 def call_count(key_name):
-    # try:
     with open("data/count_file.json","r") as file:
         data_file = json.load(file)
-
-    # except FileNotFoundError:
-    #     with open("data/count_file.json","w") as file:
-    #         file_dict = {key_name : 1} 
-    #         json.dump(file_dict, file)
-
-    # else:
+        
     if key_name in data_file:
         global no_count
         no_count = data_file[key_name]
@@ -254,13 +246,13 @@ def lang_choice():
     
     
     # app geometry
-    screen_width = popup.winfo_screenwidth()
-    screen_height = popup.winfo_screenheight()
-    window_height = 240
-    window_width = 333
-    width_center = int(screen_width/2 - window_width/2)
-    height_center = int(screen_height/2 - window_height/2)
-    window_position = popup.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
+    # screen_width = popup.winfo_screenwidth()
+    # screen_height = popup.winfo_screenheight()
+    # window_height = 240
+    # window_width = 333
+    # width_center = int(screen_width/2 - window_width/2)
+    # height_center = int(screen_height/2 - window_height/2)
+    # window_position = popup.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
     popup.resizable(False,False)
     
     message = "\nWhich Language \ndo you want to learn today?\n\nFrench or Spanish?\n\n\n"
@@ -315,13 +307,13 @@ app.config(
 )
 
 # app geometry
-screen_width = app.winfo_screenwidth()
-screen_height = app.winfo_screenheight()
-window_height = 720
-window_width = 693
-width_center = int(screen_width/2 - window_width/2)
-height_center = int(screen_height/2 - window_height/2)
-window_position = app.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
+# screen_width = app.winfo_screenwidth()
+# screen_height = app.winfo_screenheight()
+# window_height = 720
+# window_width = 693
+# width_center = int(screen_width/2 - window_width/2)
+# height_center = int(screen_height/2 - window_height/2)
+# window_position = app.geometry(f"{window_width}x{window_height}+{width_center}+{height_center}")
 app.resizable(False,False)
 
 flipper = app.after(2000, func=flip)
