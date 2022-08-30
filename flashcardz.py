@@ -305,6 +305,8 @@ app.config(
     pady=20,
     bg=bg_color
 )
+appimgzz = Image('photo', file='images/pic.png')
+app.call('wm', 'iconphoto', app._w, appimgzz)
 
 # app geometry
 # screen_width = app.winfo_screenwidth()
